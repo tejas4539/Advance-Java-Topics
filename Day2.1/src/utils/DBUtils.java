@@ -17,7 +17,7 @@ public class DBUtils {
 	public static Connection openConnection() throws SQLException {
 		if (con == null) {
 			String url = "jdbc:mysql://localhost:3306/javaData?useSSl=false&allowPublicKeyRetrieval=true";
-			con = DriverManager.getConnection(url, "root", "root");
+			con = DriverManager.getConnection(url, "root", "tejas1947");
 
 		}
 		return con;
