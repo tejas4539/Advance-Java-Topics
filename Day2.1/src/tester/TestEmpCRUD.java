@@ -2,6 +2,7 @@ package tester;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import dao.EmployeeDaoImpl;
@@ -19,6 +20,7 @@ public class TestEmpCRUD {
 				System.out.println("2.Add new Employee");
 				System.out.println("3.update Employee");
 				System.out.println("4.Delete Employee");
+				System.out.println("5.Get Department wise avg salary");
 				System.out.println("10.Exit");
 
 				try {
@@ -37,7 +39,7 @@ public class TestEmpCRUD {
 						emp.forEach(System.out::println);
 						break;
 					}
-					case 2:{
+					case 2: {
 						System.out.print("Enter emp name :");
 						String name = sc.nextLine();
 						System.out.print("Enter dept name :");
@@ -45,29 +47,36 @@ public class TestEmpCRUD {
 						System.out.print("Enter emp designation :");
 						String desg = sc.nextLine();
 						System.out.print("Enter emp salary :");
-						Double salary = sc.nextDouble();sc.nextLine();
+						Double salary = sc.nextDouble();
+						sc.nextLine();
 						System.out.print("Enter Hire Date(yyyy-mm-dd) :");
 						Date hire = Date.valueOf(sc.nextLine());
-						Employee e=new Employee(name, dept, desg, salary, hire);
-						String res=dao.addEmpDetails(e);
+						Employee e = new Employee(name, dept, desg, salary, hire);
+						String res = dao.addEmpDetails(e);
 						System.out.println(res);
 						break;
-						
+
 					}
-					case 3:{
+					case 3: {
 						System.out.print("Enter employee id :");
-						int id=sc.nextInt();
+						int id = sc.nextInt();
 						System.out.print("Enter increment :");
-						double salaryIncre=sc.nextDouble();
+						double salaryIncre = sc.nextDouble();
 						System.out.print("Enter new department :");
-						String dept=sc.next();
+						String dept = sc.next();
 						System.out.println(dao.updateEmpDetails(id, salaryIncre, dept));
-						break;	
+						break;
 					}
-					case 4:{
+					case 4: {
 						System.out.print("Enter employee id :");
-						int id=sc.nextInt();
+						int id = sc.nextInt();
 						System.out.println(dao.deleteEmpDetails(id));
+						break;
+					}
+					case 5: {
+						Map<String, Double> map = dao.getDepAvgSal();
+						map.forEach((dept, salary) -> System.out.println(dept + "\t\t       " + salary));
+
 						break;
 					}
 					case 10: {

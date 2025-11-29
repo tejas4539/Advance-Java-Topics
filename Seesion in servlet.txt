@@ -1,0 +1,4 @@
+what is cookie?
+--> Cookie is small amount of text data.
+-->created by --server & downloaded (sent) to client browser--within the response headr.
+-->cookie represent data shared across multiple dynamic pages from the same web application.(meant for same client).

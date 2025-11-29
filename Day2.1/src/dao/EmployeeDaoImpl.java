@@ -6,13 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import static utils.DBUtils.openConnection;
 import pojo.Employee;
 
 public class EmployeeDaoImpl implements IEmployeeDao {
 	private Connection con;
-	private PreparedStatement pst1, pst2,pst3,pst4;
+	private PreparedStatement pst1, pst2,pst3,pst4,pst5;
 	private String querry = "select emp_id,emp_name,salary,hire_date from employee where "
 			+ "department=? and hire_date between ? and ?";
 
@@ -24,6 +27,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 				"insert into employee (emp_name,department,designation,salary,hire_date) values(?,?,?,?,?)");
 		pst3=con.prepareStatement("update employee set salary=salary+? ,department=? where emp_id=?");
 		pst4=con.prepareStatement("delete from employee where emp_id=?");
+		pst5=con.prepareStatement("select department,avg(salary) from employee group by department");
 		System.out.println("emp dao created...");
 	}
 
@@ -79,6 +83,20 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 		return countrows==1 ? "Employee Deleted Sucessfully "
 				:"Employee Deletation failed";
 	}
+	
+
+	@Override
+	public Map<String, Double> getDepAvgSal() throws SQLException {
+		Map<String,Double> map=new LinkedHashMap<>();
+		try(ResultSet rs=pst5.executeQuery()){
+			while(rs.next()) {
+				map.put(rs.getString(1), rs.getDouble(2));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
 
 	public void cleanUp() throws SQLException {
 		if (pst1 != null) {
@@ -92,6 +110,9 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 		}
 		if (pst4 != null) {
 			pst4.close();
+		}
+		if (pst5 != null) {
+			pst5.close();
 		}
 		if (con != null) {
 			con.close();
